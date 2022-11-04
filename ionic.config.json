@@ -1,0 +1,7 @@
+{
+  "name": "test-map",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}

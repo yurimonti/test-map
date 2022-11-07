@@ -1,8 +1,9 @@
+import { IonContent, IonHeader, IonPage, IonTitle,IonButtons,IonToolbar,IonBackButton } from '@ionic/react';
 import React from 'react';
-import { IonPage, IonHeader, IonTitle, IonToolbar, IonContent,IonButtons,IonBackButton } from '@ionic/react';
+import MyCard from '../components/MyCard';
 import "./Home.css";
 
-const RequestsPage: React.FC = () => {
+const ItinerariesPage: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
@@ -10,16 +11,16 @@ const RequestsPage: React.FC = () => {
                     <IonButtons slot="start">
                         <IonBackButton defaultHref="/home" />
                     </IonButtons>
-                    <IonTitle>Requests</IonTitle>
+                    <IonTitle>Itineraries</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent fullscreen >
                 <div className='container'>
-                    <p className='text-sky-300'>Requests</p>
+                    <MyCard title='ciao' subtitle='questa è una card' content='Esempio di Card' />
                 </div>
             </IonContent>
         </IonPage>
-    );
+    )
 }
 
-export default RequestsPage;
+export default ItinerariesPage;

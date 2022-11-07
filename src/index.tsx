@@ -4,6 +4,7 @@ import App from './App';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import "leaflet/dist/leaflet.css";
+import "./index.css";
 
 const container = document.getElementById('root');
 const root = createRoot(container!);

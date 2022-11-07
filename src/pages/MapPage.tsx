@@ -24,7 +24,7 @@ const MapPage: React.FC = () => {
           <IonTitle>Map</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent>
+      <IonContent fullscreen>
         {renderMap && <MapContainer center={[43.4136837335567, 12.026927671986703]} zoom={8} scrollWheelZoom={true}>
           <TileLayer
             attribution={"https://www.openstreetmap.org/copyright"}

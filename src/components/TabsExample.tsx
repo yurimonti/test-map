@@ -6,24 +6,27 @@ import MapPage from '../pages/MapPage';
 import HomeProva from '../pages/HomeProva';
 import RequestsPage from '../pages/RequestsPage';
 import ItinerariesPage from '../pages/ItinerariesPage';
+import LoginPage from '../pages/LoginPage';
 
 const TabsExample: React.FC = () => (
+
   <IonTabs>
      <IonRouterOutlet>
           <Route exact path="/home" component={HomeProva} />
           <Route exact path="/map" component={MapPage} />
           <Route exact path="/requests" component={RequestsPage} />
           <Route exact path="/itineraries" component={ItinerariesPage} />
+          <Route exact path="/login" component={LoginPage} />
           <Route exact path="/">
-            <Redirect to="/home" />
+            <Redirect to="/map" />
           </Route>
         </IonRouterOutlet>
     <IonTabBar slot="bottom">
 
-      <IonTabButton tab="home" href='/home'>
+ {/*      <IonTabButton tab="home" href='/home'>
         <IonIcon icon={home} />
         <IonLabel>Home</IonLabel>
-      </IonTabButton>
+      </IonTabButton> */}
 
       <IonTabButton tab="map" href='/map'>
         <IonIcon icon={compass} />

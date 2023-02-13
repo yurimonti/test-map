@@ -1,8 +1,24 @@
 import React from 'react';
 import { IonPage, IonHeader, IonTitle, IonToolbar, IonContent,IonButtons,IonBackButton } from '@ionic/react';
+//import { Camera } from "@capacitor/camera";
 import "./Home.css";
 
 const RequestsPage: React.FC = () => {
+
+    /* function takePicture() {
+        this.camera.getPicture({
+            
+        }).then(
+            (imageData) => {
+              // Do something with the new photo
+            },
+            (err) => {
+              // Handle error
+              console.log('Camera issue: ' + err);
+            }
+          );
+    } */
+
     return (
         <IonPage>
             <IonHeader>

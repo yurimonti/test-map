@@ -28,19 +28,24 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import TabsExample from './components/TabsExample';
+import AppContent from './AppContent';
 
 setupIonicReact();
 
-const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+/* const prefersDark = window.matchMedia('(prefers-color-scheme: dark)'); */
 
 const App: React.FC = () => (
-  <IonApp>
+  <IonReactRouter>
+    <AppContent />
+  </IonReactRouter>
+
+);
+{/* <IonApp>
     <IonReactRouter>
       <TabsExample />
     </IonReactRouter>
-  </IonApp>
-);
-{/* <IonApp>
+  </IonApp> 
+<IonApp>
     <IonReactRouter>
       <IonRouterOutlet>
         <Route exact path="/home" component={Home} />

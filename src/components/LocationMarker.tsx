@@ -9,6 +9,7 @@ const LocationMarker: React.FC = () => {
     const [position, setPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
     const [gpsPosition, setGpsPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
     const [isLoadingGPS, setIsLoadingGPS] = useState<boolean>(false);
+    const [id, setId] = useState("");
 
     /* const updatePosition = useCallback(() => {
         Geolocation.getCurrentPosition().then((pos: Position) => { return { lat: pos.coords.latitude, lng: pos.coords.longitude } })
@@ -32,7 +33,7 @@ const LocationMarker: React.FC = () => {
 
 
     const watchMarker = async () => {
-        await Geolocation.watchPosition({ enableHighAccuracy: true }, function (position, err): void {
+        const id = await Geolocation.watchPosition({ enableHighAccuracy: true }, function (position, err): void {
             if (position !== null) {
                 const coords = position.coords;
                 console.log(coords);
@@ -41,8 +42,12 @@ const LocationMarker: React.FC = () => {
             }else console.log(err);
         })
         console.log(position);
+        setId(id);
     }
 
+    const clearId = async () => {
+        await Geolocation.clearWatch({id:id});
+    }
 
     useEffect(() => {
         watchMarker();
@@ -50,6 +55,7 @@ const LocationMarker: React.FC = () => {
         /* renderMyPosition(); */
         return () => {
             setPosition({ lat: 0, lng: 0 });
+            clearId();
         }
     }, []);
 

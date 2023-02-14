@@ -6,6 +6,7 @@ import LocationMarker from "../components/LocationMarker";
 import { privateInstance } from "../api/axiosInstance";
 import { Coordinate, POI } from "../MyTypes/types";
 import { Icon, LatLngLiteral, marker, circle } from "leaflet";
+import MyHeader from "../components/MyHeader";
 
 const MapPage: React.FC = () => {
   const [renderMap, setRenderMap] = useState(false);
@@ -91,26 +92,16 @@ const MapPage: React.FC = () => {
   } */
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/home" />
-          </IonButtons>
-          <IonTitle>Map</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        {renderMap && <MapContainer center={[43.4136837335567, 12.026927671986703]} zoom={8} scrollWheelZoom={true}>
-          <TileLayer
-            attribution={"https://www.openstreetmap.org/copyright"}
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {/* {renderMarker()} */}
-          <LocationMarker />
-        </MapContainer>}
-      </IonContent>
-    </IonPage>
+    <MyHeader title='Mappa' backButton>
+      {renderMap && <MapContainer center={[43.4136837335567, 12.026927671986703]} zoom={8} scrollWheelZoom={true}>
+        <TileLayer
+          attribution={"https://www.openstreetmap.org/copyright"}
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        {/* {renderMarker()} */}
+        <LocationMarker />
+      </MapContainer>}
+    </MyHeader>
   );
 };
 

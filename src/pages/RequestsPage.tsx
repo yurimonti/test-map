@@ -1,10 +1,10 @@
-import React from 'react';
-import { IonPage, IonHeader, IonTitle, IonToolbar, IonContent,IonButtons,IonBackButton } from '@ionic/react';
+import React,{useEffect,useContext} from 'react';
+import { PageInfoContext } from '../components/HeaderProvider';
 //import { Camera } from "@capacitor/camera";
 import "./Home.css";
+import MyHeader from '../components/MyHeader';
 
 const RequestsPage: React.FC = () => {
-
     /* function takePicture() {
         this.camera.getPicture({
             
@@ -20,21 +20,11 @@ const RequestsPage: React.FC = () => {
     } */
 
     return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonButtons slot="start">
-                        <IonBackButton defaultHref="/home" />
-                    </IonButtons>
-                    <IonTitle>Requests</IonTitle>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent fullscreen >
-                <div className='container'>
-                    <p className='text-sky-300'>Requests</p>
-                </div>
-            </IonContent>
-        </IonPage>
+        <MyHeader title='Richieste' backButton>
+            <div className='container'>
+                <p className='text-sky-300'>Requests</p>
+            </div>
+        </MyHeader>
     );
 }
 

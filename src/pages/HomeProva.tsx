@@ -2,17 +2,12 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from 
 import React from 'react'
 import { Link } from 'react-router-dom';
 import { NavigateProps } from '../MyTypes/types';
+import MyHeader from '../components/MyHeader'
 
 
 const HomeProva: React.FC<NavigateProps> = ({ history, match }: NavigateProps) => {
     return (
-        <IonPage>
-            <IonHeader>
-                <IonToolbar>
-                    <IonTitle>Home</IonTitle>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent fullscreen >
+        <MyHeader title='Home'>
                 <div /* className="relative bg-white overflow-hidden" */>
                     <div /* className="max-w-7xl mx-auto" */>
                         <div /* className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32" */>
@@ -63,8 +58,7 @@ const HomeProva: React.FC<NavigateProps> = ({ history, match }: NavigateProps) =
                         />
                     </div> */}
                 </div>
-            </IonContent>
-        </IonPage>
+            </MyHeader>
     );
 }
 export default HomeProva;

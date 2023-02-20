@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { IonPage, IonHeader, IonTitle, IonToolbar, IonContent, IonButtons, IonBackButton } from '@ionic/react';
-import { privateInstance } from '../api/axiosInstance';
-import { NavigateProps, UserCredentials } from '../MyTypes/types';
-import axios, { AxiosResponse } from 'axios';
+import React, { useContext, useState } from 'react';
+import { IonButton, useIonAlert } from '@ionic/react';
+import { UserCredentials } from '../MyTypes/types';
+import { useHistory } from 'react-router';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import MyHeader from '../components/MyHeader';
+import { loginUser } from '../api/touristApi';
+import { UserContext } from '../components/MyUserContext';
+import { HttpResponse } from '@capacitor/core';
 
 interface Tokens {
   access_token: string,
@@ -17,18 +19,21 @@ interface LoginData {
   password: string
 }
 
-const LoginPage: React.FC<NavigateProps> = ({ history, match }: NavigateProps) => {
-
+const LoginPage: React.FC = () => {
+  const userContext = useContext(UserContext);
   const [userCredentials, setUserCredentials] = useState<UserCredentials>({ username: "", password: "" });
+  const history = useHistory();
+  const [presentAlert] = useIonAlert();
 
   const loginSubmit = (values: LoginData) => {
-    axios.post("/auth/login", { username: values.username, password: values.password })
-      .then((res: AxiosResponse) => { return res.data })
+    loginUser({ username: values.username, password: values.password })
+      .then((res: HttpResponse) => { return res.data })
       .then((tokens: Tokens) => {
         console.log(tokens);
-        localStorage.setItem("access", tokens.access_token);
-        localStorage.setItem("refresh", tokens.refresh_token);
-        history.push("/map");
+        localStorage.setItem("access_token", tokens.access_token);
+        localStorage.setItem("refresh_token", tokens.refresh_token);
+        userContext.setUserInfo(tokens.access_token);
+        history.replace("/map");
       })
       .catch(err => console.log(err));
   }
@@ -46,13 +51,14 @@ const LoginPage: React.FC<NavigateProps> = ({ history, match }: NavigateProps) =
   });
 
   function login() {
-    axios.post("http://localhost:8080/api/v1/auth/login", { username: formik.values.username, password: formik.values.password })
-      .then((res: AxiosResponse) => {
-        let data: Tokens = res.data;
-        console.log(data);
-        localStorage.setItem("accessToken", data.access_token);
-        localStorage.setItem("refreshToken", data.refresh_token);
-        history.push('/map');
+    loginUser({ username: formik.values.username, password: formik.values.password })
+      .then((res: HttpResponse) => { return res.data })
+      .then((tokens: Tokens) => {
+        console.log(tokens);
+        localStorage.setItem("access_token", tokens.access_token);
+        localStorage.setItem("refresh_token", tokens.refresh_token);
+        userContext.setUserInfo(tokens.access_token);
+        history.replace("/map");
       })
       .catch(err => console.log(err))
   }

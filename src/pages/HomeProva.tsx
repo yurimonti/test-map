@@ -5,7 +5,7 @@ import { NavigateProps } from '../MyTypes/types';
 import MyHeader from '../components/MyHeader'
 
 
-const HomeProva: React.FC<NavigateProps> = ({ history, match }: NavigateProps) => {
+const HomeProva: React.FC<NavigateProps> = ({ history, match }) => {
     return (
         <MyHeader title='Home'>
                 <div /* className="relative bg-white overflow-hidden" */>

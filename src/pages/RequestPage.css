@@ -1,0 +1,33 @@
+/* .request-container {
+  display: flex;
+  justify-content: center;
+  align-content: start;
+  flex-wrap: wrap;
+  height: 100%;
+} */
+
+.request-container {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  margin:1em,1em;
+}
+
+/* @media screen and (min-width: 768px) {
+  .request-container {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: auto auto auto;
+    padding: 1rem;
+    height: 100%;
+  }
+}
+
+@media screen and (min-width: 1920px) {
+  .request-container {
+    display: grid;
+    gap: 1em;
+    grid-template-columns: auto auto auto auto;
+    padding: 1rem;
+    height: 100%;
+  }
+} */

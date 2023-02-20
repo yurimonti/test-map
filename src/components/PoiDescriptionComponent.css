@@ -1,0 +1,13 @@
+.icon {
+  font-size: large;
+  vertical-align: middle;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.icon-false{
+    color: rgba(255, 0, 0, 0.637);
+}
+.icon-true{
+    color: green;
+}

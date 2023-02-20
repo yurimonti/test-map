@@ -29,15 +29,18 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import TabsExample from './components/TabsExample';
 import AppContent from './AppContent';
+import { MyUserContext } from './components/MyUserContext';
 
 setupIonicReact();
 
 /* const prefersDark = window.matchMedia('(prefers-color-scheme: dark)'); */
 
 const App: React.FC = () => (
-  <IonReactRouter>
-    <AppContent />
-  </IonReactRouter>
+  <MyUserContext>
+    <IonReactRouter>
+      <AppContent />
+    </IonReactRouter>
+  </MyUserContext>
 
 );
 {/* <IonApp>

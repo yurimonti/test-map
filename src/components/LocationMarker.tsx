@@ -1,15 +1,19 @@
 import { Icon, LatLngBoundsExpression, LatLngExpression, LatLngLiteral, PointExpression } from 'leaflet';
 import React, { useCallback, useEffect, useState } from 'react'
 import { Marker, useMap, Popup } from 'react-leaflet';
-import { Geolocation, Position } from "@capacitor/geolocation";
+import { CallbackID, Geolocation, Position } from "@capacitor/geolocation";
+import { getMyPositionCoords } from '../api/deviceApi';
 //import iconMarker from "leaflet/dist/images/marker-icon.png";
 
-const LocationMarker: React.FC = () => {
+interface Props {
+    online?: boolean
+}
+const LocationMarker: React.FC<Props> = ({ online }) => {
     const mapRef = useMap();
     const [position, setPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
     const [gpsPosition, setGpsPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
     const [isLoadingGPS, setIsLoadingGPS] = useState<boolean>(false);
-    const [id, setId] = useState("");
+    const [id, setId] = useState<CallbackID>("");
 
     /* const updatePosition = useCallback(() => {
         Geolocation.getCurrentPosition().then((pos: Position) => { return { lat: pos.coords.latitude, lng: pos.coords.longitude } })
@@ -32,32 +36,58 @@ const LocationMarker: React.FC = () => {
     }, [gpsPosition]); */
 
 
-    const watchMarker = async () => {
-        const id = await Geolocation.watchPosition({ enableHighAccuracy: true }, function (position, err): void {
-            if (position !== null) {
-                const coords = position.coords;
+    const watchPosition = async () => {
+        const id: CallbackID = await Geolocation.watchPosition({ enableHighAccuracy: true }, function (pos, err): void {
+            if (pos !== null) {
+                const coords = pos.coords;
                 console.log(coords);
-                setPosition({ lat: coords.latitude, lng: coords.longitude });
-                mapRef.flyTo({ lat: coords.latitude, lng: coords.longitude }, 14);
-            }else console.log(err);
+                if (position.lat !== coords.latitude || position.lng !== coords.longitude) {
+                    setGpsPosition({ lat: coords.latitude, lng: coords.longitude });
+                    setIsLoadingGPS(true);
+                }
+                console.log(gpsPosition);
+            } else console.log(err);
         })
         console.log(position);
         setId(id);
     }
 
+    const updatePosition = () => {
+        setPosition(gpsPosition);
+    }
+
     const clearId = async () => {
-        await Geolocation.clearWatch({id:id});
+        return await Geolocation.clearWatch({ id: id });
+    }
+
+    async function setMyPosition() {
+        const pos = await getMyPositionCoords();
+        setPosition(pos);
+        if (!isLoadingGPS) {
+            mapRef.flyTo(pos, 16, {
+                animate: true, duration: 1.6,
+                noMoveStart: true
+            });
+            setIsLoadingGPS(true);
+        } else mapRef.setView(pos, mapRef.getZoom(), {
+            animate: true, duration: 1.6,
+            noMoveStart: true
+        });
+        console.log(pos);
     }
 
     useEffect(() => {
-        watchMarker();
+        watchPosition();
+        setMyPosition();
+        updatePosition();
+        /* watchMarker(); */
         console.log(position);
         /* renderMyPosition(); */
         return () => {
-            setPosition({ lat: 0, lng: 0 });
             clearId();
+            setIsLoadingGPS(false);
         }
-    }, []);
+    }, [gpsPosition]);
 
     function getIcon(iconSize: PointExpression, image: string): Icon {
         return new Icon({

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import CheckBoxComponent from './CheckBoxComponent';
 import InputSelect from './InputSelect';
 import { getAllCategories, getAllTypes } from '../api/touristApi';
-import { CategoryType, PoiTagRel, PoiType, Tag } from '../MyTypes/types';
+import { CategoryType, PoiTagRel, PoiType, Tag } from '../utility/types';
 import { HttpResponse } from '@capacitor/core';
 
 interface Props {

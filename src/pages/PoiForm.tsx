@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router';
-import { CategoryType, City, PoiTagRel, PoiType } from '../MyTypes/types';
+import { CategoryType, City, PoiTagRel, PoiType } from '../utility/types';
 import { createModifyPoiRequest, createNewPoiRequest, getAllCategories, getAllCities, getAllTypes, getIdentifiersByCoords, getPoi } from '../api/touristApi';
 import FormInfo from '../components/FormInfo';
 import './form.css'
@@ -9,6 +9,7 @@ import { getToken, makePrivateRequest, makePublicRequest, privateRequest } from 
 import { refresh } from 'ionicons/icons';
 import LoadingComponent from '../components/LoadingComponent';
 import MyModal from '../components/MyModal';
+import { HttpResponse } from '@capacitor/core';
 
 //FIXME: vedere perché aggiungi più tag 
 
@@ -338,7 +339,7 @@ const PoiForm: React.FC = () => {
             console.log(id);
             console.log(city?.identifiers);
             console.log(city);
-            if(city){
+            if (city) {
                 result = city.identifiers.map(i => i.toString()).includes(id);
             }
         } catch (error) {
@@ -347,8 +348,39 @@ const PoiForm: React.FC = () => {
         return result;
     }
 
-    function thenFunction(functionTarget: any) {
-        functionTarget.then((res: any) => {
+    /* async function thenFunction(functionTarget: any) {
+        try {
+            const response: HttpResponse = await functionTarget;
+            console.log(response.status);
+            setAlertInfo({
+                messages: {
+                    title: "SUCCESSO",
+                    content: "Richiesta creata correttamente",
+                    result: "OK"
+                },
+                closeAlert: () => {
+                    setTrigger(false);
+                    history.push("/map");
+                }
+            });
+        } catch (err) {
+            console.log(err);
+            setAlertInfo({
+                messages: {
+                    title: "ERRORE",
+                    content: "Richiesta non creata",
+                    result: "ERRORE"
+                },
+                closeAlert: () => {
+                    setTrigger(false);
+                }
+            })
+        } finally{
+            setIsLoading(false);
+            setTrigger(true);
+        } */
+
+        /* functionTarget.then((res: any) => {
             console.log(res.status);
             setAlertInfo({
                 messages: {
@@ -362,33 +394,59 @@ const PoiForm: React.FC = () => {
                 }
             });
             setTrigger(true);
-        })
-            .catch((err: any) => {
-                console.log(err);
-                setAlertInfo({
-                    messages: {
-                        title: "ERRORE",
-                        content: "Richiesta non creata",
-                        result: "ERRORE"
-                    },
-                    closeAlert: () => {
-                        setTrigger(false);
-                    }
-                })
-                setTrigger(true);
-            })
-    }
-
+        }) */
+        /*        .catch ((err: any) => {
+       console.log(err);
+       setAlertInfo({
+           messages: {
+               title: "ERRORE",
+               content: "Richiesta non creata",
+               result: "ERRORE"
+           },
+           closeAlert: () => {
+               setTrigger(false);
+           }
+       })
+       setTrigger(true);
+   }) */
+    /* }
+ */
     async function sendRequest(isNew: boolean) {
-        let api = null;
+        setIsLoading(true);
         if (isNew) {
             const isIn = await isInMyCity();
             console.log(isIn);
             if (isIn === true) {
-                api = createNewPoiRequest(payload, (city as City).id).then((res: any) => {
-                    console.log("nuovo");
-                    return res;
-                })
+                try {
+                    const response: HttpResponse = await createNewPoiRequest(payload, (city as City).id);
+                    console.log(response.status);
+                    setAlertInfo({
+                        messages: {
+                            title: "SUCCESSO",
+                            content: "Richiesta creata correttamente",
+                            result: "OK"
+                        },
+                        closeAlert: () => {
+                            setTrigger(false);
+                            history.push("/requests");
+                        }
+                    });
+                } catch (err) {
+                    console.log(err);
+                    setAlertInfo({
+                        messages: {
+                            title: "ERRORE",
+                            content: "Richiesta non creata",
+                            result: "ERRORE"
+                        },
+                        closeAlert: () => {
+                            setTrigger(false);
+                        }
+                    })
+                } finally{
+                    setIsLoading(false);
+                    setTrigger(true);
+                }
             } else {
                 setAlertInfo({
                     messages: {
@@ -400,17 +458,48 @@ const PoiForm: React.FC = () => {
                         setTrigger(false);
                     }
                 })
+                setIsLoading(false);
                 setTrigger(true);
             }
-        } else api = createModifyPoiRequest(payload);
-        api && thenFunction(api);
+        } else {
+            try {
+                const response: HttpResponse = await createModifyPoiRequest(payload);
+                console.log(response.status);
+                setAlertInfo({
+                    messages: {
+                        title: "SUCCESSO",
+                        content: "Richiesta creata correttamente",
+                        result: "OK"
+                    },
+                    closeAlert: () => {
+                        setTrigger(false);
+                        history.push("/requests");
+                    }
+                });
+            } catch (err) {
+                console.log(err);
+                setAlertInfo({
+                    messages: {
+                        title: "ERRORE",
+                        content: "Richiesta non creata",
+                        result: "ERRORE"
+                    },
+                    closeAlert: () => {
+                        setTrigger(false);
+                    }
+                })
+            } finally{
+                setIsLoading(false);
+                setTrigger(true);
+            }
+        }
     }
 
     //-------------------------------------------handle inputs----------------------------------------------
 
     return (
         <MyHeader title='Modulo POI' backButton>
-            <div className="Form">
+            {isLoading ? <LoadingComponent /> : <div className="Form">
                 <div className="px-4 pt-4">
                     <h3 className="text-lg font-medium leading-6 text-gray-900">
                         Informazioni POI Base
@@ -434,7 +523,7 @@ const PoiForm: React.FC = () => {
                     onClose={alertInfo.closeAlert}
                     messages={alertInfo.messages}
                 />
-            </div>
+            </div>}
         </MyHeader>
     )
 }

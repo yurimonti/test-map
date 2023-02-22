@@ -5,7 +5,7 @@ import { logOut, logIn } from 'ionicons/icons';
 import { useHistory } from 'react-router-dom'
 import { UserContext } from './MyUserContext';
 import { RouteComponentProps } from 'react-router';
-import { NavigateProps } from '../MyTypes/types';
+import { NavigateProps } from '../utility/types';
 import { makePublicRequest } from '../api/capacitorApi';
 import LoadingComponent from './LoadingComponent';
 

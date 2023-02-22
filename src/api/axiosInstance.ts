@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig, RawAxiosRequestHeaders } from "axios";
 import { getExpirationTime } from "./jwtDecoder";
 import dayjs from "dayjs";
-import { MY_IP } from "../MyTypes/types";
+import { MY_IP } from "../utility/types";
 
 
 const baseURL = "http://"+MY_IP+":8080/api/v1";

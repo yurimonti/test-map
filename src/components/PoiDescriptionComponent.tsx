@@ -1,27 +1,12 @@
 import { FC, ReactNode } from 'react'
-import { POI, PoiTagRel } from '../MyTypes/types'
+import { POI, PoiTagRel } from '../utility/types'
 import { IonIcon } from '@ionic/react';
 import { checkmarkCircle, closeCircle } from 'ionicons/icons';
 import './PoiDescriptionComponent.css';
+import { renderHours,printArray } from '../utility/functionUtility';
 
 interface Props {
     poi?: POI
-}
-
-function renderHours(hours: string[]) {
-    if (hours.length === 2) return hours[0] + " - " + hours[1];
-    if (hours.length === 4) return hours[0] + " - " + hours[1] + " | " + hours[2] + " - " + hours[3];
-    return "chiuso";
-}
-
-function printArray(array: any[]) {
-    let result = "";
-    result = array[0] + "; ";
-    for (let index = 1; index < array.length; index++) {
-        const element = array[index];
-        result = result + element + "; ";
-    }
-    return result;
 }
 
 function iconBooleanTag(tagRel: PoiTagRel): ReactNode | string {

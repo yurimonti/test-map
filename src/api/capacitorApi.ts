@@ -5,7 +5,7 @@ import {
   HttpOptions,
   HttpParams,
 } from "@capacitor/core";
-import { MY_IP } from "../MyTypes/types";
+import { MY_IP } from "../utility/types";
 import dayjs from "dayjs";
 import { getExpirationTime } from "./jwtDecoder";
 const baseUrl: string = "http://" + MY_IP + ":8080/api/v1";

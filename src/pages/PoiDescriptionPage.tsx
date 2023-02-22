@@ -3,7 +3,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getPoi } from '../api/touristApi';
 import LoadingComponent from '../components/LoadingComponent';
 import PoiDescriptionComponent from '../components/PoiDescriptionComponent';
-import { POI } from '../MyTypes/types';
+import { POI } from '../utility/types';
 import MyHeader from '../components/MyHeader';
 
 const PoiDescriptionPage: FC = () => {

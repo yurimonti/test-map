@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PoiRequest } from '../MyTypes/types';
+import { PoiRequest } from '../utility/types';
 //import { Camera } from "@capacitor/camera";
 import "./RequestPage.css";
 import MyHeader from '../components/MyHeader';
@@ -71,7 +71,7 @@ const RequestsPage: React.FC = () => {
               <IonIcon icon={addCircleOutline} slot='end' className='align-middle my-auto ml-2' />
           </button>
           {requests.map(request => {
-            return <PoiRequestCard key={request.id} request={request} />
+            return <PoiRequestCard key={request.id} request={request} reloadAction={setReload} />
           })}
         </div>}
 

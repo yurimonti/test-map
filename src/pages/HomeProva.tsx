@@ -1,7 +1,7 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/react';
 import React from 'react'
 import { Link } from 'react-router-dom';
-import { NavigateProps } from '../MyTypes/types';
+import { NavigateProps } from '../utility/types';
 import MyHeader from '../components/MyHeader'
 
 

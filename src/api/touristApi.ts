@@ -1,7 +1,29 @@
+import { Coordinate, POI } from "../utility/types";
 import { privateRequest, makePublicRequest } from "./capacitorApi";
-import { getReverseGeo } from "./geocodingService";
+import { getReverseGeo, provaGetDirections } from "./geocodingService";
 
 const baseUrl = "/tourist";
+
+async function createGeoJsonList(pois:POI[]) {
+  const profiles = [
+    "driving-car",
+    "wheelchair",
+    "cycling-electric",
+    "foot-walking",
+  ];
+  let coords = pois.map((p:POI) => p.coordinate);
+  let reversed = coords.map((c:Coordinate) => [c.lon, c.lat]);
+  let result = [];
+  for (const profile of profiles) {
+    try {
+      const res = await provaGetDirections(reversed, profile);
+      result.push(res);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  return result;
+}
 
 async function getPois() {
   return await privateRequest({ url: "/pois", method: "get" });
@@ -123,7 +145,12 @@ async function getIdentifiersByCoords(coordinates:any):Promise<any> {
   return geocode?.features[0]?.properties?.id;
 }
 
+async function getItinerary(id:number) {
+ return await privateRequest({ url: "/user/itinerary/" + id.toString(),method:'get'});
+}
+
 export {
+  getItinerary,
   createModifyPoiRequest,
   createNewPoiRequest,
   getTouristpoiRequests,
@@ -141,5 +168,6 @@ export {
   getAllTypes,
   getPoi,
   getAllCities,
-  getIdentifiersByCoords
+  getIdentifiersByCoords,
+  createGeoJsonList
 };

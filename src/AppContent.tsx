@@ -7,10 +7,12 @@ import ItinerariesPage from './pages/ItinerariesPage';
 import LoginPage from './pages/LoginPage';
 import MapPage from './pages/MapPage';
 import RequestsPage from './pages/RequestsPage';
-import QuayPage from './pages/QuayPage';
 import { UserContext } from './components/MyUserContext';
 import PoiForm from './pages/PoiForm';
 import PoiDescriptionPage from './pages/PoiDescriptionPage';
+import CreateItineraryPage from './pages/CreateItineraryPage';
+import ItineraryDescriptionPage from './pages/ItineraryDescriptionPage';
+import ExecItineraryPage from './pages/ExecItineraryPage';
 
 const AppContent: React.FC = () => {
     const userContext = useContext(UserContext);
@@ -22,6 +24,9 @@ const AppContent: React.FC = () => {
             }}  />
             <Route exact path="/requests" component={RequestsPage} />
             <Route exact path="/itineraries" component={ItinerariesPage} />
+            <Route exact path="/itineraries/:id" component={ItineraryDescriptionPage} />
+            <Route exact path="/following" component={ExecItineraryPage} />
+            <Route exact path="/itinerary" component={CreateItineraryPage} />
             <Route exact path="/poi-form" component={PoiForm} />
             <Route exact path="/poi-form/poi/:id" component={PoiForm} />
             <Route exact path="/pois/:id" component={PoiDescriptionPage} />

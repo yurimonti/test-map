@@ -1,7 +1,7 @@
 import { Icon, LatLngBoundsExpression, LatLngExpression, LatLngLiteral, PointExpression } from 'leaflet';
 import React, { useCallback, useEffect, useState } from 'react'
 import { Marker, useMap, Popup } from 'react-leaflet';
-import { CallbackID, Geolocation, Position } from "@capacitor/geolocation";
+import { CallbackID, ClearWatchOptions, Geolocation, Position } from "@capacitor/geolocation";
 import { getMyPositionCoords } from '../api/deviceApi';
 //import iconMarker from "leaflet/dist/images/marker-icon.png";
 
@@ -13,7 +13,7 @@ const LocationMarker: React.FC<Props> = ({ online }) => {
     const [position, setPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
     const [gpsPosition, setGpsPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
     const [isLoadingGPS, setIsLoadingGPS] = useState<boolean>(false);
-    const [id, setId] = useState<CallbackID>("");
+    const [id, setId] = useState<any>();
 
     /* const updatePosition = useCallback(() => {
         Geolocation.getCurrentPosition().then((pos: Position) => { return { lat: pos.coords.latitude, lng: pos.coords.longitude } })
@@ -35,8 +35,55 @@ const LocationMarker: React.FC<Props> = ({ online }) => {
         }).catch(err => console.log(err))
     }, [gpsPosition]); */
 
+    /* watchTrack() {
+    this.id = Geolocation.watchPosition({}, (position, err) => {
+      this.ngZone.run(() => {
+        this.lat = position.coords.latitude;
+        this.lng = position.coords.longitude;
+        console.log('location changed===> ','lat: '+this.lat+' lng:'+this.lng);
+      });
+    });
 
-    const watchPosition = async () => {
+ stopTrack() {
+    console.log('this.wait=',this.id);  
+    Geolocation.clearWatch({ id: this.id });
+  } */
+
+    const asyncId = {
+        setId: async (value: string) => {
+            await Promise.resolve();
+            setId(value);
+        },
+        getId: async () => {
+            await Promise.resolve();
+            return id;
+        },
+    };
+
+    const watchTrack = () => {
+        const id = Geolocation.watchPosition({ enableHighAccuracy: true }, (pos, err) => {
+            if (pos !== null) {
+                const coords = pos.coords;
+                console.log(coords);
+                if (position.lat !== coords.latitude || position.lng !== coords.longitude) {
+                    setGpsPosition({ lat: coords.latitude, lng: coords.longitude });
+                    setIsLoadingGPS(true);
+                }
+                console.log(gpsPosition);
+            } else console.log(err);
+        });
+        console.log("watching=", id);
+        setId(id);
+    }
+
+    const stopTrack = async () => {
+        const toStop = await id;
+        console.log('clearing=', toStop);
+        const opt: ClearWatchOptions = { id: toStop };
+        Geolocation.clearWatch(opt);
+    }
+
+    /* const watchPosition = async () => {
         const id: CallbackID = await Geolocation.watchPosition({ enableHighAccuracy: true }, function (pos, err): void {
             if (pos !== null) {
                 const coords = pos.coords;
@@ -50,15 +97,15 @@ const LocationMarker: React.FC<Props> = ({ online }) => {
         })
         console.log(position);
         setId(id);
-    }
+    } */
 
     const updatePosition = () => {
         setPosition(gpsPosition);
     }
 
-    const clearId = async () => {
+    /* const clearId = async () => {
         return await Geolocation.clearWatch({ id: id });
-    }
+    } */
 
     async function setMyPosition() {
         const pos = await getMyPositionCoords();
@@ -77,14 +124,15 @@ const LocationMarker: React.FC<Props> = ({ online }) => {
     }
 
     useEffect(() => {
-        watchPosition();
+        stopTrack();
+        watchTrack();
         setMyPosition();
         updatePosition();
         /* watchMarker(); */
         console.log(position);
         /* renderMyPosition(); */
         return () => {
-            clearId();
+            stopTrack();
             setIsLoadingGPS(false);
         }
     }, [gpsPosition]);

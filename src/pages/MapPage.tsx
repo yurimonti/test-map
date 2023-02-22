@@ -2,7 +2,7 @@ import "./MapPage.css";
 import { MapContainer, Marker, TileLayer, GeoJSON, Popup } from "react-leaflet";
 import { useEffect, useState } from "react";
 import LocationMarker from "../components/LocationMarker";
-import { Coordinate, POI } from "../MyTypes/types";
+import { Coordinate, POI } from "../utility/types";
 import { Icon, LatLngExpression, LatLngLiteral } from "leaflet";
 import MyHeader from "../components/MyHeader";
 import MyMarker from "../components/MyMarker";

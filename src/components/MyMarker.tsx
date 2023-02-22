@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { POI } from '../MyTypes/types';
+import { POI } from '../utility/types';
 import { Marker, Popup } from 'react-leaflet';
 import { Icon } from 'leaflet';
 import { IonButton, IonIcon, IonText } from '@ionic/react';
@@ -51,7 +51,7 @@ const MyMarker: React.FC<Props> = ({ poi, popup, icon, isPoiIcon, popUpEffect })
                 <div className="text-center text-sm mx-2">
                     <h1 className="font-semibold text-lg">{info.title}</h1>
                     <>
-                        {poi.types[0].categories.map(c => { return <IconToCategory category={c.name} height={6} width={6} /> })}
+                        {poi.types[0].categories.map(c => { return <IconToCategory key={c.id} category={c.name} height={6} width={6} /> })}
                         <h4 className="ml-1 font-sans text-base " >{printTypes(poi)}</h4></>
                     <h4 className="font-sans" >{info.address}</h4>
                     {info.price !== 0 && info.price !== null && (

@@ -3,7 +3,7 @@ import { Fragment,FC, ReactNode } from 'react'
 
 interface Props {
     label:string,
-    icon:ReactNode,
+    icon?:ReactNode,
     children:ReactNode,
     buttonStyle:string,
     menuStyle:string
@@ -16,7 +16,7 @@ const DropDownComponent:FC<Props> = ({label,icon,children,buttonStyle,menuStyle}
             <div>
               <Menu.Button className={buttonStyle}>
                 {label}
-                {icon}
+                {icon!==undefined && icon}
               </Menu.Button>
             </div>
             <Transition

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { IonButton, useIonAlert } from '@ionic/react';
-import { UserCredentials } from '../MyTypes/types';
+import { UserCredentials } from '../utility/types';
 import { useHistory } from 'react-router';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';

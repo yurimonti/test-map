@@ -1,5 +1,5 @@
 import React, { ChangeEventHandler } from 'react'
-import { PoiTagRel } from '../MyTypes/types';
+import { PoiTagRel } from '../utility/types';
 
 interface Props {
     keyValue:undefined | string,

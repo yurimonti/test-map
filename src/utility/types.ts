@@ -139,7 +139,7 @@ interface POI {
   tagValues: PoiTagRel[];
 }
 
-export const MY_IP: string = "192.168.178.38";
+export const MY_IP: string = "localhost";
 
 // 👇️ named export
 export type {

@@ -26,18 +26,34 @@ const MyHeader: React.FC<Props> = ({ children, backButton, title }) => {
     const userContext = useContext(UserContext);
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
+    const logout = async () => {
+        setIsLoading(true);
+        try {
+            const res = await logoutUser({ refresh_token: localStorage.getItem("refresh_token") });
+            console.log(res);
+            localStorage.clear();
+            userContext.setUserInfo(null);
+            navigate.replace('/login');
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setIsLoading(false);
+        }
+    }
+
     useEffect(() => {
-      userContext.setUserInfo(localStorage.getItem('access_token'));    
+        userContext.setUserInfo(localStorage.getItem('access_token'));
     }, [localStorage.getItem("access_token")])
-    
+
 
     const LogInButton = userContext.userInfo.isAuth ? (
         <button
             type="button"
             onClick={() => {
                 //TODO. rivedere per il context
-                setIsLoading(true);
-                logoutUser({refresh_token: localStorage.getItem("refresh_token")})
+                logout();
+
+                /* logoutUser({ refresh_token: localStorage.getItem("refresh_token") })
                     .then((res) => {
                         console.log(res);
                         localStorage.clear();
@@ -45,13 +61,13 @@ const MyHeader: React.FC<Props> = ({ children, backButton, title }) => {
                         navigate.replace('/login');
                     })
                     .catch(err => console.log(err))
-                    .finally(()=>{
+                    .finally(() => {
                         setIsLoading(false);
-                    })
+                    }) */
             }}
         >
             {userContext.userInfo.isAuth === true ? userContext.userInfo.username : ""}
-            <IonIcon icon={logOut} slot='end' size='large' color='primary' className='align-middle'/>
+            <IonIcon icon={logOut} slot='end' size='large' color='primary' className='align-middle' />
         </button>
     ) : (
         <button

@@ -8,6 +8,9 @@ import MyMarker from '../components/MyMarker';
 import { createGeoJsonList, createItinerary, getPois } from '../api/touristApi';
 import ModalComponent from '../components/ModalComponent';
 import { useHistory } from 'react-router';
+import MyModal from '../components/MyModal';
+import LoadingComponent from '../components/LoadingComponent';
+import GpsButton from '../components/GpsButton';
 
 const errorAlertMessage = {
     title: "ERRORE",
@@ -17,13 +20,13 @@ const errorAlertMessage = {
 
 
 const CreateItineraryPage: FC = () => {
+    const [positionTrigger, setPositionTrigger] = useState<boolean>(false);
     const [addedPois, setAddedPois] = useState<POI[]>([]);
     const [pois, setPois] = useState<POI[]>([]);
     const [renderMap, setRenderMap] = useState(false);
     const [reload, setReload] = useState<boolean>(false);
     const [triggerModal, setTriggerModal] = useState<boolean>(false);
     const [alertTrigger, setAlertTrigger] = useState<boolean>(false);
-    const [center, setCenter] = useState([])
     const history = useHistory();
     const [isLoading, setIsLoading] = useState(false);
     const [alertData, setAlertData] = useState({
@@ -59,50 +62,35 @@ const CreateItineraryPage: FC = () => {
         }));
     }
 
-    function createNewItinerary() {
+    async function createNewItinerary() {
         setIsLoading(true);
-        createGeoJsonList(addedPois)
-            .then((data) => {
-                console.log(data.map(g => JSON.stringify(g)));
-                createItinerary({
-                    poisId: addedPois.map(p => p.id),
-                    geoJsonList: data.map((geo: any) => JSON.stringify(geo)),
-                    name: itineraryData.name,
-                    description: itineraryData.description,
-                })
-                    .then(res => {
-                        console.log(res);
-                        setAlertData({
-                            close: () => {
-                                setAlertTrigger(false);
-                                history.replace('/itineraries');
-                            }, messages: {
-                                title: "SUCCESSO",
-                                content: "Itinerario creato con successo",
-                                result: "OK"
-                            }
-                        }
-                        )
-                    })
-                    .catch(err => {
-                        console.log(err);
-                        setAlertData(prev => {
-                            return { ...prev, messages: errorAlertMessage }
-                        });
-                    })
-                    .finally(() => {
-                        setIsLoading(false);
-                        setAlertTrigger(true);
-                    })
-            })
-            .catch(err => {
-                console.log(err);
-                setAlertData(prev => {
-                    return { ...prev, messages: errorAlertMessage }
-                })
-                setIsLoading(false);
-                setAlertTrigger(true);
-            })
+        try {
+            const geoData = await createGeoJsonList(addedPois);
+            await createItinerary({
+                poisId: addedPois.map(p => p.id),
+                geoJsonList: geoData.map((geo: any) => JSON.stringify(geo)),
+                name: itineraryData.name,
+                description: itineraryData.description,
+            });
+            setAlertData({
+                close: () => {
+                    setAlertTrigger(false);
+                    history.replace('/itineraries');
+                }, messages: {
+                    title: "SUCCESSO",
+                    content: "Itinerario creato con successo",
+                    result: "OK"
+                }
+            });
+        } catch (err) {
+            console.log(err);
+            setAlertData(prev => {
+                return { ...prev, messages: errorAlertMessage }
+            });
+        } finally {
+            setIsLoading(false);
+            setAlertTrigger(true);
+        }
     }
 
     async function fillPois() {
@@ -125,10 +113,10 @@ const CreateItineraryPage: FC = () => {
         }
     }, [])
 
-    const render = ()=>{
+    const render = () => {
         let result = false;
-        if(!triggerModal){
-            if(count > 0) result = true;
+        if (!triggerModal || !alertTrigger) {
+            if (count > 0) result = true;
         }
         return result;
     }
@@ -136,18 +124,20 @@ const CreateItineraryPage: FC = () => {
 
     return (
         <MyHeader backButton title='Nuovo Itinerario' >
-            {render() && <div className='fixed z-20 ml-6 bottom-10 left-auto text-white rounded-full p-2'>
+            {isLoading ? <LoadingComponent /> : render() && <div className='fixed z-30 ml-6 bottom-10 left-auto text-white rounded-full p-2'>
                 <AddedPoiComponents pois={addedPois} addPois={setAddedPois} label={count} onComplete={() => {
                     count > 1 && setTriggerModal(true)
                 }} />
             </div>}
-            {renderMap && <MapContainer center={[43.4136837335567, 12.026927671986703]} zoom={8} scrollWheelZoom={true}>
+            {/* <GpsButton setTrigger={() => {setPositionTrigger((p: boolean) => { return !p })}} /> */}
+            {isLoading ? <LoadingComponent /> : renderMap && <MapContainer center={[43.4136837335567, 12.026927671986703]} zoom={8} scrollWheelZoom={true}>
                 <TileLayer
                     attribution={"https://www.openstreetmap.org/copyright"}
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 {renderMarkers()}
             </MapContainer>}
+            <MyModal onClose={alertData.close} show={alertTrigger} messages={alertData.messages} />
             <ModalComponent
                 open={triggerModal}
                 onClose={() => {

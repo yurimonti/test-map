@@ -111,7 +111,7 @@ const CategoriesComponent: React.FC<Props> = ({
                         })
                         return result; */
                         //FINO A QUI
-                        //TODO:vedere meglio
+                        //vedere meglio
                         /* let result = [...new Map(prev.map((item:any) =>
                             [item["tag"]["id"], item])).values()];
                         return result; */

@@ -2,7 +2,7 @@ import { Menu, Transition } from '@headlessui/react'
 import { Fragment,FC, ReactNode } from 'react'
 
 interface Props {
-    label:string,
+    label?:string,
     icon?:ReactNode,
     children:ReactNode,
     buttonStyle:string,
@@ -15,7 +15,7 @@ const DropDownComponent:FC<Props> = ({label,icon,children,buttonStyle,menuStyle}
           <Menu as="div" className="inline-block text-left">
             <div>
               <Menu.Button className={buttonStyle}>
-                {label}
+                {label && label}
                 {icon!==undefined && icon}
               </Menu.Button>
             </div>

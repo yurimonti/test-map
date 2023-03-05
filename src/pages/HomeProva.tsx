@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { NavigateProps } from '../utility/types';
 import MyHeader from '../components/MyHeader'
 
-
+//TODO: mettere immmagine
 const HomeProva: React.FC<NavigateProps> = ({ history, match }) => {
     return (
         <MyHeader title='Home'>

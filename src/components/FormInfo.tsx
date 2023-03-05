@@ -130,7 +130,7 @@ const FormInfo: React.FC<Props> = ({ inputs, actions, buttons }) => {
                     </div>
 
                     {/* categories input select */}
-                    {/* FIXME: rivedere metodi del componente */}
+                    {/*rivedere metodi del componente */}
                     <CategoriesComponent
                         categories={inputs.categories}
                         setCategories={actions.setCategories}

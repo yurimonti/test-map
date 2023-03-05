@@ -19,9 +19,9 @@ const AppContent: React.FC = () => {
     const authShell =
         <>
             <Route exact path="/home" component={HomeProva} />
-            <Route exact path="/map" render={()=>{
+            <Route exact path="/map" render={() => {
                 return <MapPage renderAll={true} />
-            }}  />
+            }} />
             <Route exact path="/requests" component={RequestsPage} />
             <Route exact path="/itineraries" component={ItinerariesPage} />
             <Route exact path="/itineraries/:id" component={ItineraryDescriptionPage} />
@@ -34,6 +34,9 @@ const AppContent: React.FC = () => {
             <Route exact path="/">
                 <Redirect to="/map" />
             </Route>
+            <Route>
+                <Redirect to="/map" />
+            </Route>
         </>;
 
     const notAuthShell = <>
@@ -41,6 +44,9 @@ const AppContent: React.FC = () => {
         <Route exact path="/login" component={LoginPage} />
         {/* <Route exact path='/map' component={MapPage} /> */}
         <Route exact path="/">
+            <Redirect to="/home" />
+        </Route>
+        <Route>
             <Redirect to="/home" />
         </Route>
     </>;

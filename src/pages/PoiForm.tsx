@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useParams, useHistory } from 'react-router';
 import { CategoryType, City, PoiTagRel, PoiType } from '../utility/types';
-import { createModifyPoiRequest, createNewPoiRequest, getAllCategories, getAllCities, getAllTypes, getIdentifiersByCoords, getPoi } from '../api/touristApi';
+import { createModifyPoiRequest, createNewPoiRequest, getAllTypes, getIdentifiersByCoords, getPoi } from '../api/touristApi';
 import FormInfo from '../components/FormInfo';
 import './form.css'
 import MyHeader from '../components/MyHeader';
-import { getToken, makePrivateRequest, makePublicRequest, privateRequest } from '../api/capacitorApi';
-import { refresh } from 'ionicons/icons';
+import { getToken, makePrivateRequest } from '../api/capacitorApi';
 import LoadingComponent from '../components/LoadingComponent';
 import MyModal from '../components/MyModal';
 import { HttpResponse } from '@capacitor/core';

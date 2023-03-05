@@ -127,7 +127,7 @@ const ItinerariesPage: FC = () => {
     }, [reload])
 
     return (
-        <MyHeader title='Richieste' backButton>
+        <MyHeader title='Itinerari' backButton>
             <div className="max-w-2xl my-2 sm:mt-0 mx-auto px-4 sm:px-6 lg:max-w-7xl lg:px-8">
                 <div className='text-center sm:text-inherit sm:flex sm:flex-row-reverse sm:justify-between text-sm'>
                     <button

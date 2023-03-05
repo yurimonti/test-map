@@ -30,8 +30,25 @@ const ItineraryDescriptionPage: FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [currentGeoJson, setCurrentGeoJson] = useState<CurrentGeoJson>();
     const [geoJsonSelect, setGeoJsonSelect] = useState<any>([]);
-    const [buttons, setButtons] = useState(initialValuesButton);
+    const [buttons, setButtons] = useState<boolean[]>(initialValuesButton);
     const history = useHistory();
+
+    const switchButton = (profile: string) => {
+        let result: boolean[];
+        switch (profile) {
+            case 'driving-car': result = [true, false, false, false];
+                break;
+            case 'wheelchair': result = [false, true, false, false];
+                break;
+            case 'cycling-electric': result = [false, false, true, false];
+                break;
+            case 'foot-walking': result = [false, false, false, true];
+                break;
+            default: result = [true, false, false, false];
+                break;
+        }
+        return result;
+    }
 
     async function getData() {
         setIsLoading(true);
@@ -40,13 +57,17 @@ const ItineraryDescriptionPage: FC = () => {
             const data = response.data;
             setData(data);
             const parsedData = data.geoJsonList.map((geo: any) => JSON.parse(geo));
+            console.log('parsed', parsedData);
+            const firstButtonName = parsedData[0].metadata.query.profile;
+            setButtons(switchButton(firstButtonName));
             setGeoJsonSelect(
                 parsedData.map((r: any) => {
+                    console.log(r.metadata.query.profile);
                     return { name: r.metadata.query.profile, data: r };
                 })
             );
             setCurrentGeoJson({
-                name: parsedData[0].metadata.query.profile,
+                name: firstButtonName,
                 data: parsedData[0],
             });
         } catch (err) {
@@ -76,7 +97,6 @@ const ItineraryDescriptionPage: FC = () => {
                 <>
                     <div className='flex justify-between align-middle mx-8' >
                         <div className="w-fit my-3">
-                            {/* FIXME:controllare questo bottone */}
                             <button
                                 type="button"
                                 disabled={isDisabled("driving-car")}
@@ -173,7 +193,7 @@ const ItineraryDescriptionPage: FC = () => {
                             type="button"
                             className="rounded-full ring-4 ring-green-500 w-fit h-fit my-auto"
                             onClick={() => {
-                                history.push('/following',{data:currentGeoJson?.data})
+                                history.push('/following', { data: currentGeoJson?.data })
                             }}
                         >
                             <IonIcon icon={playCircleSharp} color='success' slot='end' size='large' className='align-middle ' />

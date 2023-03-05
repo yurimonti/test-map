@@ -6,9 +6,9 @@ import { getMyPositionCoords } from '../api/deviceApi';
 //import iconMarker from "leaflet/dist/images/marker-icon.png";
 
 interface Props {
-    online?: boolean
+    trigger?: boolean
 }
-const LocationMarker: React.FC<Props> = ({ online }) => {
+const LocationMarker: React.FC<Props> = ({ trigger }) => {
     const mapRef = useMap();
     const [position, setPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
     const [gpsPosition, setGpsPosition] = useState<LatLngLiteral>({ lat: 0, lng: 0 });
@@ -60,8 +60,8 @@ const LocationMarker: React.FC<Props> = ({ online }) => {
         },
     };
 
-    const watchTrack = () => {
-        const id = Geolocation.watchPosition({ enableHighAccuracy: true }, (pos, err) => {
+    const watchTrack = async () => {
+        const id = await Geolocation.watchPosition({ enableHighAccuracy: true }, (pos, err) => {
             if (pos !== null) {
                 const coords = pos.coords;
                 console.log(coords);
